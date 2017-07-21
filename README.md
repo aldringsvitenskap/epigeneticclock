@@ -5,6 +5,6 @@ Original software from http://www.genomebiology.com/2013/14/10/R115 © 2013 Horv
 
 # To run
 
-setwd("path/to/this/repo")
-source("horvath2013.R")
+  - setwd("path/to/this/repo")
+  - source("horvath2013.R")
 
