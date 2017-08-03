@@ -1,8 +1,6 @@
 # Code from http://www.genomebiology.com/2013/14/10/R115 available under CC BY 2.0
 # Also refer to tutorial at http://labs.genetics.ucla.edu/horvath/dnamage/TUTORIAL1.pdf
 
-setwd("C:/dev/epigeneticclock/")
-
 library(WGCNA)
 library(sqldf)
 library(impute)
@@ -23,7 +21,8 @@ probeAnnotation21kdatMethUsed = read.csv("probeAnnotation21kdatMethUsed.csv")
 probeAnnotation27k = read.csv("datMiniAnnotation27k.csv")
 datClock = read.csv("AdditionalFile3.csv")
 
-dat0 = read.csv.sql("MethylationDataExample55.csv")
+#dat0 = read.csv.sql(inputFilePath)
+dat0 = read.csv.sql("MethylationExample.csv")
 
 nSamples = dim(dat0)[[2]] - 1
 nProbes = dim(dat0)[[1]]

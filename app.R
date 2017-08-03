@@ -1,32 +1,45 @@
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
+# Calculates age from methylation data
 #
 
 library(shiny)
 
-# Define UI for application that draws a histogram
-ui <- fluidPage(# Application title
-  titlePanel("Epigenetic clock"),
-  mainPanel(
-    tableOutput("table"),
-    
-    #plotOutput("distPlot"),
-    textOutput("dump")))
+# Define UI
+ui <- fluidPage(titlePanel("Epigentic clock"),
+                
+                sidebarLayout(
+                  sidebarPanel(
+                    fileInput(
+                      inputId = "methylationFile",
+                      label = "Choose methylation csv file",
+                      accept = c('text/csv',
+                                 'text/comma-separated-values,text/plain',
+                                 '.csv'),
+                      multiple = FALSE
+                    )
+                  ),
+                  
+                  mainPanel(tableOutput("table"),
+                            textOutput("dump"))
+                ))
 
-# Define server logic required to draw a histogram
+# Define server
 server <- function(input, output) {
-  output$dump <- renderText("Calculating")
+  options(shiny.maxRequestSize = 30 * 1024 ^ 2)
   
-  source("horvath2013.R")
-  
-  output$table <- renderTable(datout)
-  
-  output$dump <- renderText("Hello")
+  observe({
+    if (!is.null(input$methylationFile)) {
+      inputFileName <- input$methylationFile[[1, 'name']]
+      inputFileSize <- input$methylationFile[[1, 'size']]
+      intpuFilePath <- input$methylationFile[[1, 'datapath']]
+      
+      output$dump <-
+        renderText(sprintf("Processing %s %d bytes", inputFileName, inputFileSize))
+      
+      source("horvath2013.R")
+      output$table <- renderTable(datout)
+    }
+  })
 }
 
 # Run the application
