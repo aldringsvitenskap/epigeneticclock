@@ -1,0 +1,10 @@
+# RStudio stuff
+
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Output from running the clock
+LogFile.txt
+Output.csv
