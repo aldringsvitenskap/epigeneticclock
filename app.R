@@ -26,18 +26,19 @@ ui <- fluidPage(titlePanel("Epigentic clock"),
 # Define server
 server <- function(input, output) {
   options(shiny.maxRequestSize = 30 * 1024 ^ 2)
+  source("horvath2013.R")
   
   observe({
     if (!is.null(input$methylationFile)) {
       inputFileName <- input$methylationFile[[1, 'name']]
       inputFileSize <- input$methylationFile[[1, 'size']]
-      intpuFilePath <- input$methylationFile[[1, 'datapath']]
+      inputFilePath <- input$methylationFile[[1, 'datapath']]
       
       output$dump <-
         renderText(sprintf("Processing %s %d bytes", inputFileName, inputFileSize))
       
-      source("horvath2013.R")
-      output$table <- renderTable(datout)
+
+      output$table <- renderTable(calculateAge(inputFilePath))
     }
   })
 }
