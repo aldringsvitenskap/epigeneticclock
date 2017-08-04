@@ -7,21 +7,18 @@ library(shiny)
 # Define UI
 ui <- fluidPage(titlePanel("Epigentic clock"),
                 
-                sidebarLayout(
-                  sidebarPanel(
-                    fileInput(
-                      inputId = "methylationFile",
-                      label = "Choose methylation csv file",
-                      accept = c('text/csv',
-                                 'text/comma-separated-values,text/plain',
-                                 '.csv'),
-                      multiple = FALSE
-                    )
-                  ),
-                  
-                  mainPanel(tableOutput("table"),
-                            textOutput("dump"))
-                ))
+                sidebarLayout(sidebarPanel(
+                  fileInput(
+                    inputId = "methylationFile",
+                    label = "Choose methylation csv file",
+                    accept = c('text/csv',
+                               'text/comma-separated-values,text/plain',
+                               '.csv'),
+                    multiple = FALSE
+                  )
+                ),
+                
+                mainPanel(tableOutput("table"))))
 
 # Define server
 server <- function(input, output) {
@@ -34,11 +31,16 @@ server <- function(input, output) {
       inputFileSize <- input$methylationFile[[1, 'size']]
       inputFilePath <- input$methylationFile[[1, 'datapath']]
       
-      output$dump <-
-        renderText(sprintf("Processing %s %d bytes", inputFileName, inputFileSize))
+      withProgress(
+        message = sprintf("Processing %s", inputFileName),
+        detail = sprintf("%d bytes", inputFileSize),
+        value = 0,
+        {
+          ageResults <- calculateAge(inputFilePath)
+        }
+      )
       
-
-      output$table <- renderTable(calculateAge(inputFilePath))
+      output$table <- renderTable(ageResults)
     }
   })
 }
