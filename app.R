@@ -5,7 +5,7 @@
 library(shiny)
 
 # Define UI
-ui <- fluidPage(titlePanel("Epigentic clock"),
+ui <- fluidPage(titlePanel("Epigenetic clock"),
                 
                 sidebarLayout(sidebarPanel(
                   fileInput(
