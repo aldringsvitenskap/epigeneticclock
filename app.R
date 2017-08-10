@@ -36,7 +36,11 @@ server <- function(input, output) {
         detail = sprintf("%d bytes", inputFileSize),
         value = 0,
         {
-          ageResults <- calculateAge(inputFilePath)
+          ageResults = tryCatch({
+            calculateAge(inputFilePath)
+          }, error = function(e) {
+            paste("Error: ", e$message)
+          })
         }
       )
       
