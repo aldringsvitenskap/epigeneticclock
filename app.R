@@ -36,6 +36,7 @@ server <- function(input, output) {
         detail = sprintf("%d bytes", inputFileSize),
         value = 0,
         {
+          setProgress(1/20)
           ageResults = tryCatch({
             calculateAge(inputFilePath)
           }, error = function(e) {
