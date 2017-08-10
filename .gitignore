@@ -8,3 +8,6 @@
 # Output from running the clock
 LogFile.txt
 Output.csv
+
+# Shinyapps stuff
+rsconnect
