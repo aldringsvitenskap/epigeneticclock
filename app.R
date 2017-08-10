@@ -41,6 +41,7 @@ server <- function(input, output) {
           }, error = function(e) {
             paste("Error: ", e$message)
           })
+          setProgress(1)
         }
       )
       
