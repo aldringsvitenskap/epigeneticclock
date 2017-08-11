@@ -39,7 +39,8 @@ server <- function(input, output) {
         {
           setProgress(1/20)
           ageResults = tryCatch({
-            calculateAge(inputFilePath)
+            csvFile = read.csv.sql(inputFilePath)
+            calculateAge(csvFile)
           }, error = function(e) {
             paste("Error: ", e$message)
           })

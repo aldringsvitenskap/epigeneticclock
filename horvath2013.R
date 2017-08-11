@@ -21,8 +21,7 @@ probeAnnotation21kdatMethUsed = read.csv("probeAnnotation21kdatMethUsed.csv")
 probeAnnotation27k = read.csv("datMiniAnnotation27k.csv")
 datClock = read.csv("AdditionalFile3.csv")
 
-calculateAge = function(methylationFile) {
-  dat0 = read.csv.sql(methylationFile)
+calculateAge = function(dat0) {
   nSamples = dim(dat0)[[2]] - 1
   nProbes = dim(dat0)[[1]]
   dat0[, 1] = gsub(x = dat0 [, 1],
