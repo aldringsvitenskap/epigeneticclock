@@ -4,6 +4,8 @@
 
 library(shiny)
 library(readr)
+library(sqldf)
+library(GEOquery)
 
 # Define UI
 ui <- fluidPage(titlePanel("Epigenetic clock"),
@@ -16,10 +18,11 @@ ui <- fluidPage(titlePanel("Epigenetic clock"),
                                'text/comma-separated-values,text/plain',
                                '.csv'),
                     multiple = FALSE
-                  )
+                  ),
+                  textInput(inputId = "gsmID", label = "GSM sample ID", placeholder = "GSMxxx")
                 ),
                 
-                mainPanel(tableOutput("table"), textOutput("logfile"))))
+                mainPanel(tableOutput("table"), tableOutput("description"), textOutput("logfile"))))
 
 # Define server
 server <- function(input, output) {
@@ -27,20 +30,38 @@ server <- function(input, output) {
   source("horvath2013.R")
   
   observe({
-    if (!is.null(input$methylationFile)) {
-      inputFileName <- input$methylationFile[[1, 'name']]
-      inputFileSize <- input$methylationFile[[1, 'size']]
-      inputFilePath <- input$methylationFile[[1, 'datapath']]
+    if ((!is.null(input$methylationFile)) || (!is.null(input$gsmID) && nchar(input$gsmID) > 3)) {
+      methylationTable = NULL;
+      methylationMessage = NULL;
+      methylationDetail = NULL;
+      methylationDescription = NULL;
+      
+      if (!is.null(input$methylationFile)) {
+        inputFileName <- input$methylationFile[[1, 'name']]
+        inputFileSize <- input$methylationFile[[1, 'size']]
+        inputFilePath <- input$methylationFile[[1, 'datapath']]
+        
+        methylationMessage <- sprintf("Processing %s", inputFileName)
+        methylationDetail <- sprintf("%d bytes", inputFileSize)
+        methylationTable <- read.csv.sql(inputFilePath)
+        methylationDescription <- "Empty..."
+      } else {
+        gsmTable <- getGEO(input$gsmID)
+        
+        methylationMessage <- "LAlal"
+        methylationDetail <- "laoaoa"
+        methylationTable <- Table(gsmTable)[,1:2]
+        methylationDescription <- head(Meta(gsmTable))
+      }
       
       withProgress(
-        message = sprintf("Processing %s", inputFileName),
-        detail = sprintf("%d bytes", inputFileSize),
+        message = methylationMessage,
+        detail = methylationDetail,
         value = 0,
         {
           setProgress(1/20)
           ageResults = tryCatch({
-            csvFile = read.csv.sql(inputFilePath)
-            calculateAge(csvFile)
+            calculateAge(methylationTable)
           }, error = function(e) {
             paste("Error: ", e$message)
           })
@@ -48,8 +69,17 @@ server <- function(input, output) {
         }
       )
       
-      output$table <- renderTable(ageResults)
+      output$table <- renderTable({ageResults},  
+                                  striped = TRUE,  
+                                  rownames = TRUE,
+                                  caption = "Estimaged DNAm age",
+                                  caption.placement = getOption("xtable.caption.placement", "top"))
       output$logfile <- renderText(read_file("LogFile.txt"))
+      output$description <- renderTable({methylationDescription},
+                                        striped = TRUE,  
+                                        rownames = TRUE,
+                                        caption = "GSM metadata",
+                                        caption.placement = getOption("xtable.caption.placement", "top"))
     }
   })
 }

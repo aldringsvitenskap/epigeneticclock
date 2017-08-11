@@ -2,7 +2,6 @@
 # Also refer to tutorial at http://labs.genetics.ucla.edu/horvath/dnamage/TUTORIAL1.pdf
 
 library(WGCNA)
-library(sqldf)
 library(impute)
 library(RPMM) #also necessary, for me
 
