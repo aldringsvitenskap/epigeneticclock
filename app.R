@@ -3,6 +3,7 @@
 #
 
 library(shiny)
+library(readr)
 
 # Define UI
 ui <- fluidPage(titlePanel("Epigenetic clock"),
@@ -18,7 +19,7 @@ ui <- fluidPage(titlePanel("Epigenetic clock"),
                   )
                 ),
                 
-                mainPanel(tableOutput("table"))))
+                mainPanel(tableOutput("table"), textOutput("logfile"))))
 
 # Define server
 server <- function(input, output) {
@@ -47,6 +48,7 @@ server <- function(input, output) {
       )
       
       output$table <- renderTable(ageResults)
+      output$logfile <- renderText(read_file("LogFile.txt"))
     }
   })
 }
