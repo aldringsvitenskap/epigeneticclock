@@ -164,8 +164,6 @@ BMIQcalibration = function(datM,
   ### fit type1
   print("Fitting EM beta mixture to goldstandard probes")
   
-  incProgress(1/3)
-  
   set.seed(1)
   rand.idx = sample(1:length(beta1.v), min(c(nfit, length(beta1.v)))   , replace =
                       FALSE)
@@ -268,6 +266,7 @@ BMIQcalibration = function(datM,
     
     
     print("Fitting EM beta mixture to input probes")
+    incProgress(1/dim(datM)[[1]])
     
     # I fixed an error in the following line (replaced beta1 by beta2)
     set.seed(1)
