@@ -43,15 +43,20 @@ server <- function(input, output) {
         
         methylationMessage <- sprintf("Processing %s", inputFileName)
         methylationDetail <- sprintf("%d bytes", inputFileSize)
-        methylationTable <- read.csv.sql(inputFilePath)
         methylationDescription <- "Empty..."
+        methylationTable <- read.csv.sql(inputFilePath)
       } else {
-        gsmTable <- getGEO(input$gsmID)
-        
-        methylationMessage <- "LAlal"
-        methylationDetail <- "laoaoa"
-        methylationTable <- Table(gsmTable)[,1:2]
-        methylationDescription <- head(Meta(gsmTable))
+        gsmTable <-  tryCatch({
+          getGEO(input$gsmID)
+        }, error = function(e) {
+          NULL
+        })
+        methylationMessage <- sprintf("Processing %s", input$gsmID)
+        methylationDetail <- "Unknown size"
+        if (!is.null(gsmTable)) {
+          methylationTable <- Table(gsmTable)[,1:2]
+          methylationDescription <- head(Meta(gsmTable))
+        }
       }
       
       withProgress(
