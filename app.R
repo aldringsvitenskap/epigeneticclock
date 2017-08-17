@@ -19,7 +19,10 @@ ui <- fluidPage(titlePanel("Epigenetic clock"),
                                '.csv'),
                     multiple = FALSE
                   ),
-                  textInput(inputId = "gsmID", label = "GSM sample ID", placeholder = "GSMxxx")
+                  helpText("Supports .csv files where the first column lists the cpg cites, and the following columns list their methylation values"),
+                  textInput(inputId = "gsmID", label = "GSM sample ID", placeholder = "GSMxxx"),
+                  helpText("Enter a GSM id from the Geo Expression Omnibus and wait for processing to start"),
+                  tags$a(href="https://doi.org/10.1186/gb-2013-14-10-r115", "Based on \"DNA methylation age of human tissues and cell types\" by Steve Horvath")
                 ),
                 
                 mainPanel(tableOutput("table"), tableOutput("description"), textOutput("logfile"))))
