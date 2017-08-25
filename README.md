@@ -18,4 +18,4 @@ https://aging.shinyapps.io/epigeneticclock/
 
 # Screenshot
 
-![Some text](/screenshot01.png?raw=true "Some Title")
+![Predicted age of a GSM sample](/screenshot01.png?raw=true "Predicted age of a GSM sample")
