@@ -16,3 +16,6 @@ https://aging.shinyapps.io/epigeneticclock/
   - Load epigeneticclock.Rproj into RStudio
   - Open app.r and click "Run App"
 
+# Screenshot
+
+![Some text](/screenshot01.png?raw=true "Some Title")
