@@ -30,7 +30,10 @@ ui <- fluidPage(titlePanel("Epigenetic clock"),
                     "by",
                     a(href="https://www.biostat.ucla.edu/people/horvath", "Steve Horvath."),
                     "Code available at ",
-                    a(href="https://github.com/aldringsvitenskap/epigeneticclock", "Github"))
+                    a(href="https://github.com/aldringsvitenskap/epigeneticclock", "Github."),
+                    "Send comments or questions to",
+                    a(href="https://twitter.com/snowpong", "@snowpong")
+                  )
                 ),
 
                 mainPanel(tableOutput("table"), tableOutput("description"), textOutput("logfile"))))
