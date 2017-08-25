@@ -38,21 +38,29 @@ server <- function(input, output) {
   methylation <- reactiveValues(Table  = NULL, Message = NULL, Detail = NULL, Description = NULL, Name = NULL)
 
   observeEvent(input$calculate, {
-    gsmTable <-  tryCatch({
-      getGEO(input$gsmID)
-    }, error = function(e) {
-      NULL
-    })
-    methylation$Name <- input$gsmID
-    methylation$Message <- sprintf("Processing %s", input$gsmID)
-    methylation$Detail <- "Unknown size"
-    if (!is.null(gsmTable)) {
-      methylation$Description <- head(Meta(gsmTable))
-      methylation$Table <- Table(gsmTable)[,1:2]
-    } else {
-      methylation$Description <- NULL
-      methylation$Table <- NULL
-    }
+    withProgress(
+      message = paste("Loading ", input$gsmID),
+      detail = "Unknown size",
+      value = 0.3,
+      {
+        gsmTable <-  tryCatch({
+          getGEO(input$gsmID)
+        }, error = function(e) {
+          NULL
+        })
+        methylation$Name <- input$gsmID
+        methylation$Message <- sprintf("Processing %s", input$gsmID)
+        methylation$Detail <- "Unknown size"
+        if (!is.null(gsmTable)) {
+          methylation$Description <- head(Meta(gsmTable))
+          methylation$Table <- Table(gsmTable)[,1:2]
+        } else {
+          methylation$Description <- NULL
+          methylation$Table <- NULL
+        }
+        setProgress(1)
+      }
+    )
   })
 
   observeEvent(input$methylationFile, {
@@ -96,7 +104,7 @@ server <- function(input, output) {
     output$description <- renderTable({methylation$Description},
                                       striped = TRUE,
                                       rownames = TRUE,
-                                      caption = "GSM metadata",
+                                      caption = paste("GSM metadata for ", methylation$Name),
                                       caption.placement = getOption("xtable.caption.placement", "top"))
   })
 }
