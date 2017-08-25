@@ -69,9 +69,6 @@ server <- function(input, output) {
   })
 
   observeEvent(methylation$Table, {
-    if (file.exists("LogFile.txt")) {
-      file.remove("LogFile.txt")
-    }
     withProgress(
       message = methylation$Message,
       detail = methylation$Detail,

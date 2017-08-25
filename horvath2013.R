@@ -21,16 +21,13 @@ probeAnnotation27k = read.csv("datMiniAnnotation27k.csv")
 datClock = read.csv("AdditionalFile3.csv")
 
 calculateAge = function(dat0) {
+  file.create("LogFile.txt")
   nSamples = dim(dat0)[[2]] - 1
   nProbes = dim(dat0)[[1]]
   dat0[, 1] = gsub(x = dat0 [, 1],
                    pattern = "\"",
                    replacement = "")
   
-  #create log file
-  
-  file.remove("LogFile.txt")
-  file.create("LogFile.txt")
   DoNotProceed = FALSE
   cat(
     paste(
@@ -52,7 +49,7 @@ calculateAge = function(dat0) {
       ),
       file = "LogFile.txt",
       append = TRUE
-      )
+    )
   }
   if (nProbes == 0) {
     DoNotProceed = TRUE
@@ -64,7 +61,7 @@ calculateAge = function(dat0) {
       ) ,
       file = "LogFile.txt",
       append = TRUE
-      )
+    )
   }
   if (nSamples > nProbes) {
     cat(
@@ -75,7 +72,7 @@ calculateAge = function(dat0) {
       ),
       file = "LogFile.txt",
       append = TRUE
-      )
+    )
   }
   if (is.numeric(dat0[, 1])) {
     DoNotProceed = TRUE
@@ -97,9 +94,9 @@ calculateAge = function(dat0) {
         numbers from Illumina) since these entries are numeric values. Make sure that the first column of the file contains CpG probe
         identifiers such as cg00000292. Instead it contains ",
         dat0[1:3, 1]
-    ),
-    file = "LogFile.txt",
-    append = TRUE
+      ),
+      file = "LogFile.txt",
+      append = TRUE
     )
   }
   datout = data.frame(
@@ -127,7 +124,7 @@ calculateAge = function(dat0) {
         ),
         file = "LogFile.txt",
         append = TRUE
-        )
+      )
     }
     XchromosomalCpGs = as.character(probeAnnotation27k$Name[probeAnnotation27k$Chr ==
                                                               "X"])
@@ -147,7 +144,7 @@ calculateAge = function(dat0) {
         ),
         file = "LogFile.txt",
         append = TRUE
-        )
+      )
     }
     match1 = match(probeAnnotation21kdatMethUsed$Name , dat0[, 1])
     if (sum(is.na(match1)) > 0) {
@@ -186,7 +183,7 @@ calculateAge = function(dat0) {
               "),
         file = "LogFile.txt",
         append = TRUE
-        )
+      )
     }
     if (sum(datout$Comment != "") > 0) {
       cat(
