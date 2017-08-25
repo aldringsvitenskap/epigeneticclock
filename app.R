@@ -68,7 +68,7 @@ server <- function(input, output) {
     })
   })
 
-  observeEvent(methylation$Table, {
+  observeEvent(methylation$Table, ignoreNULL = FALSE, {
     withProgress(
       message = methylation$Message,
       detail = methylation$Detail,
