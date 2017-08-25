@@ -20,12 +20,17 @@ ui <- fluidPage(titlePanel("Epigenetic clock"),
                                '.csv'),
                     multiple = FALSE
                   ),
-                  tags$hr(),
+                  hr(),
                   helpText("Enter a GEO sample id (for example GSM401945) and press the button"),
                   textInput(inputId = "gsmID", label = "Enter GSM sample ID", placeholder = "GSMXXXX"),
                   actionButton(inputId = "calculate", label = "Predict age"),
-                  tags$hr(),
-                  tags$a(href="https://doi.org/10.1186/gb-2013-14-10-r115", "Based on \"DNA methylation age of human tissues and cell types\" by Steve Horvath")
+                  hr(),
+                  p("Based on",
+                    a(href="https://doi.org/10.1186/gb-2013-14-10-r115", "\"DNA methylation age of human tissues and cell types\""),
+                    "by",
+                    a(href="https://www.biostat.ucla.edu/people/horvath", "Steve Horvath."),
+                    "Code available at ",
+                    a(href="https://github.com/aldringsvitenskap/epigeneticclock", "Github"))
                 ),
 
                 mainPanel(tableOutput("table"), tableOutput("description"), textOutput("logfile"))))
